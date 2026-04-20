@@ -1,0 +1,30 @@
+name: ingest.games
+type: duckdb.seed
+strategy: replace
+parameters:
+  path: games.csv-filtered.csv
+description: |
+  Loads the Stean games data table from local CSV file.
+  This table contains payment type information including payment_type_id and payment_description.
+  The lookup table is a static reference table that maps payment type codes to human-readable descriptions.
+
+  Design Choices:
+  - Why read from local CSV:
+    - Payment type codes are standardized and do not change frequently
+    - Local seed file provides version control and reproducibility
+
+  - Why seed file:
+    - Seed files are a convenient way to load static data into a database
+    - Seed asset automatically materializes into a table on each run
+  AppID,Name,Release date,Estimated owners,Price,Windows,Linux,Metacritic score,Positive,Negative,Genres  
+
+
+columns:
+  - name: AppID
+    type: INTEGER
+    description: Steam AppID
+    primary_key: true
+    nullable: false
+  - name: Name
+    type: VARCHAR
+    description: Game name

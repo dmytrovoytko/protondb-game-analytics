@@ -1,0 +1,19 @@
+name: protondb-pipeline
+schedule: monthly
+start_date: "2026-03-29"
+
+default_connections:
+  duckdb: "duckdb-default"
+
+variables:
+  protondb_starting_year:
+    type: string
+    default: "2022"
+  games_starting_year:
+    type: string
+    default: "2010"
+  game_types:
+    type: array
+    items:
+      type: string
+    default: ["free", "paid"]
