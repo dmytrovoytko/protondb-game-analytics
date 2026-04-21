@@ -116,7 +116,7 @@ If you run container in CodeSpace it will pop-up the notification that `Your app
 ![Streamlit app ports](/screenshots/streamlit2.png)
 
 When you open the app it shows the dialog, where you can choose a period to analize. 
-Also you can choose Linux distros to compare/visualize:
+Also you can choose Linux distros to compare/visualize/narrow down data on dashboards:
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
 
