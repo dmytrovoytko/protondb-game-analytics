@@ -32,6 +32,10 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 - deploy orchestration tool to manage pipeline
 - build a dashboard to visualize the data
 
+### ProtonDB data sample
+
+You can take a look at the sample of processed data in [reports_piiremoved.json-sample.csv](/data/reports_piiremoved.json-sample.csv).
+
 🕵️ Questions that I want to investigate during this project:
 
 - What Linux distros are popular among gamers?
