@@ -14,6 +14,8 @@ For the GitHub CodeSpace option you don't need to use anything extra at all - ju
 If you feel deeply unsatisfied by Windows unreliable behavior/performace, or just curious about switching to Linux, but your desire to play games is stopping you, you might need Linux Gaming Analytics. With ProtonDB.com you can find out what games reliably play on Linux, which distros and hardware could be the best choice for your switch. Gamers from around the world submit reports on which games play well, and which don't even install.
 But if you don't want to dig into those reports, you probably just need a few dashboards that this project provides to make your decision quickly.
 
+Please take into account, gaming reports are just a part of total Linux usage - from volunteers who reported about their experience. So it's just a glimps of big picture, definitely with realistic corellation.
+
 ## 🎯 Goals
 
 This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalksClub/data-engineering-zoomcamp)'2025.
@@ -56,7 +58,7 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 3. **Start CodeSpace**
 4. The app works in docker container, **you don't need to install packages locally to test it**.
-5. Only if you want to develop the project locally, you can run `pip install -r requirements.txt` (project tested on python 3.12/3.13).
+5. Only if you want to develop the project locally, you can run `uv sync` in `pipeline` directory (project tested on python 3.12/3.13).
 6. You need to copy/rename `.env.local` to `.env` and edit setting according to your environment. Run `cp .env.local .env` then edit `.env` file. Remember to never commit files containing credentials or any other sensitive information.
 
 (in progress)
@@ -65,8 +67,46 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 9. If you don't want to/can't use BigQuery, the default settings will activate alternative warehouse - DuckDb database (you can also create/use free! [MotherDuck](https://motherduck.com/) account to use cloud data warehouse).
 
+### :arrow_forward: Run workflow
 
-### 📊📈 Dashboards
+1. **Run `bash deploy.sh` to start app Docker container**. Building container takes some time. When new log messages will stop appearing, you can press enter to return to a command line (service will keep running in background).
+
+![Bruin pipeline start](/screenshots/bruin1.png)
+
+When you see these messages the app is ready!
+
+![Bruin pipeline finish](/screenshots/bruin4.png)
+
+You can scroll up to see previous messages with the steps of the workflow.
+
+2. Workflow commands are located in `start_app.sh` 
+- [it starts `terraform-setup.sh` script] (in progress)
+- then installs Bruin, UV, Streamlit. 
+- then starts Bruin pipeline `bruin run pipeline.yml`
+- finally executes `uv run streamlit run app.py` to start dashboard app
+
+3. Pipeline includes 3 key tasks (download dataset & unpack, extract & transform data, load data to warehouse). Pipeline files are located in `pipeline/assets` folder.
+
+4. Dashboard app is based on Streamlit and located in `app.py`
+
+
+### 📊📈 Dashboard
+
+If you run docker container locally you can click the link `Local URL: http://localhost:8501` to open the app dashboard.
+
+If you run container in CodeSpace it will pop-up the notification that `Your application running on port 8501 is available.` - click `Open in Browser`. 
+
+![Streamlit app popup](/screenshots/streamlit1.png)
+
+💡 In case you accidentally close that pop-up or dashboard page and you need it again, you can always open that page from `Ports` tab (click that little 'globe' icon over a link):
+
+![Streamlit app ports](/screenshots/streamlit2.png)
+
+When you open the app it shows the dialog, where you can choose a period to analize and Linux distros to compare/visualize:
+
+![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
+
+Check out other dashboards:
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
 
@@ -77,6 +117,25 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard4.png)
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard5.png)
+
+### :stop_sign: Stop all containers
+
+Run `docker compose down` in command line to stop the running container.
+
+Don't forget to remove downloaded images if you experimented with project locally! Use `docker images` to list all images and then `docker image rm ...` to remove those you don't need anymore.
+
+[And of course don't forget to destroy resources in Google Cloud/BigQuery!]
+
+
+## 🔜 Next steps
+
+I personally switched to Linux many years ago, and really happy about that. It's interesting to observe how it becomes more and more popular, including gamers as active users. Playing games on Linux becomes much easier each year - you can see positive trends on dashboard 3.
+
+I plan to finish part of the pipeline to load data to BigQuery and Terraform scripts to allocate/destroy related infrastructure (BQ dataset and Storage bucket).
+
+Some more insightful vizualizations coming soon also. What do you want to know about Linux Gaming?
+
+Stay tuned!
 
 ## Support
 
