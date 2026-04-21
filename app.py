@@ -28,7 +28,7 @@ BIGQUERY = 'bigquery' # export to BigQuery
 
 MODE = os.environ.get('DATAWAREHOUSE', DUCKDB) # DUCKDB BIGQUERY SAMPLE
 DUCKDB_CONNECTION = '/app/data/duckdb.db'
-DATA_DIR = f'/app/data/'  # ! with '/' at the end!
+DATA_DIR = f'./data/'  # ! with '/' at the end!
 TARGET_FILE_NAME = 'reports_piiremoved.json'
 
 def duckdb_connect(connection=""):
@@ -92,12 +92,13 @@ def clean_os_name(os_string):
     # # Remove numbers and punctuation
     # cleaned_name = re.sub(r'[\d\W_]+', '', base_name)
     
-    # # Remove any character NOT in the range 00-7F (ASCII)
-    # cleaned_name = re.sub(r'[^\x00-\x7F]+', '', cleaned_name)
-
-    # remove everything first non letter/space and after
+    # Remove first non letter/space and everything after
     cleaned_name = re.sub(r'[^a-zA-Z\s\!_].*', '', base_name).strip()
 
+    # Remove any character NOT in the range 00-7F (ASCII)
+    cleaned_name = re.sub(r'[^\x00-\x7F]+', '', cleaned_name)
+
+    # Remove 'release'
     cleaned_name = re.sub(r'release$', '', cleaned_name).strip()
     
     # Return a default if the result is empty after cleaning
@@ -177,8 +178,8 @@ def main():
         # -------------------------------------------------------------------------
         # DASHBOARD 1: Monthly OS Trends (Top 10)
         # -------------------------------------------------------------------------
-        st.header("1. Monthly Operating System Trends")
-        st.info("Showing trends for the Top 10 most frequent OS families over the selected period.")
+        st.header("1. Top 10 OS Monthly Trends")
+        # st.info("Showing trends for the Top 10 most frequent OS families over the selected period.")
         
         if not filtered_df.empty:
             # Group by month and OS
