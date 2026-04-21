@@ -18,7 +18,7 @@ Please take into account, gaming reports are just a part of total Linux usage - 
 
 ## 🎯 Goals
 
-This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalksClub/data-engineering-zoomcamp)'2025.
+This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalksClub/data-engineering-zoomcamp)'2026.
 
 **The main goal** is straight-forward: build an end-to-end **Extract - Load - Transform** data pipeline, then **visualize** some insights.  
 - choose an interesting dataset
@@ -86,12 +86,13 @@ When you see these messages the app is ready!
 You can scroll up to see previous messages with the steps of the workflow.
 
 2. Workflow commands are located in `start_app.sh` 
+
 - [it starts `terraform-setup.sh` script] (work in progress)
 - then installs Bruin, UV, Streamlit. 
-- then starts Bruin pipeline `bruin run pipeline.yml`
+- then starts Bruin pipeline `bruin run pipeline.yml` that ingests 350+ thousands records (as of 2026-04).
 - finally executes `uv run streamlit run app.py` to start dashboard app
 
-3. Pipeline includes 3 key tasks (download dataset & unpack, extract & transform data, load data to warehouse). Pipeline files are located in `pipeline/assets` folder.
+3. Pipeline includes 3 key tasks (download dataset & unpack `json` file, extract & transform data, load data to warehouse). Pipeline files are located in `pipeline/assets` folder.
 
 4. Dashboard app is based on Streamlit and located in `app.py`
 
