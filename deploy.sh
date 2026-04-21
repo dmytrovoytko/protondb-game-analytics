@@ -11,6 +11,7 @@ echo
 # echo
 # cp -r ../data .
 # cp test.env .env
+mkdir -p ./data
 
 if [[ -e ".env" ]]
   then

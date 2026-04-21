@@ -28,10 +28,16 @@ echo '1.5. Installing Streamlit'
 uv add streamlit && uv run streamlit --version
 # cd /app
 
+
 echo
-echo '2. Starting Streamlit app...'
+echo '2. Starting Bruin pipeline...'
 echo
-# uv run streamlit run /app/app.py
+bruin run pipeline.yml --start-date 2022-01-01 --end-date 2026-03-31
+sleep 5
+
+echo
+echo '3. Starting Streamlit app...'
+echo
 uv run streamlit run app.py
 
 sleep 5
