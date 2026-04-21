@@ -25,7 +25,7 @@ But if you don't want to dig into those reports, you probably just need a few da
 
 This project addresses the challenge of analyzing ProtonDB gaming reports to provide actionable insights for (potential) Linux gamers/switchers, overcoming data research volume and visualization hurdles.
 
-Maybe you were thinking of Ubuntu? Perhaps you need this comparison?
+Maybe you were thinking of Ubuntu? Perhaps you need a comparison like this?
 
 ![Data Engineering ProtonDB Game Analytics](/screenshots/os-comparison.png)
 
