@@ -92,6 +92,8 @@ Core pipeline complete. BigQuery+Google Cloud Storage and Terraform integrations
 - `bash deploy.sh`
 - observe processing (3-5 minutes) and finally click the link `Local URL: http://localhost:8501` to open the app dashboard
 
+### Step by step
+
 - [Setup environment](#hammer_and_wrench-setup-environment)
 - [Run workflow](#arrow_forward-run-workflow)
 - [Dashboards](#-dashboards)
