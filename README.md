@@ -52,6 +52,13 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 ## 🚀 Instructions to reproduce
 
+### TL;DR
+
+- Start CodeSpace - **4-core machine with 16Gb RAM**
+- `cp .env.local .env`
+- `bash deploy.sh`
+- observe processing and finally click the link `Local URL: http://localhost:8501` to open the app dashboard
+
 - [Setup environment](#hammer_and_wrench-setup-environment)
 - [Run workflow](#arrow_forward-run-workflow)
 - [Dashboards](#-dashboards)
@@ -59,7 +66,7 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 ### :hammer_and_wrench: Setup environment
 
 1. **Fork this repo on GitHub**. Or use `git clone https://github.com/dmytrovoytko/protondb-game-analytics.git` command to clone it locally, then `protondb-game-analytics`.
-2. Create GitHub CodeSpace from the repo. You need to choose 4-core machine with 16Gb RAM.
+2. Create GitHub CodeSpace from the repo. **You need to choose 4-core machine with 16Gb RAM.**
 ![Create CodeSpace](/screenshots/codespace1.png)
 
 3. **Start CodeSpace**
