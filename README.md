@@ -14,6 +14,10 @@ For the GitHub CodeSpace option you don't need to use anything extra at all - ju
 If you feel deeply unsatisfied by Windows unreliable behavior/performace, or just curious about switching to Linux, but your desire to play games is stopping you, you might need Linux Gaming Analytics. With ProtonDB.com you can find out what games reliably play on Linux, which distros and hardware could be the best choice for your switch. Gamers from around the world submit reports on which games play well, and which don't even install.
 But if you don't want to dig into those reports, you probably just need a few dashboards that this project provides to make your decision quickly.
 
+Maybe you were thinking of Ubuntu? Perhaps you need this comparison?
+
+![Data Engineering ProtonDB Game Analytics](/screenshots/os-comparison.png)
+ 
 Please take into account, gaming reports are just a part of total Linux usage - from volunteers who reported about their experience. So it's just a glimps of big picture, definitely with realistic corellation.
 
 ## 🎯 Goals
@@ -109,7 +113,8 @@ If you run container in CodeSpace it will pop-up the notification that `Your app
 
 ![Streamlit app ports](/screenshots/streamlit2.png)
 
-When you open the app it shows the dialog, where you can choose a period to analize and Linux distros to compare/visualize:
+When you open the app it shows the dialog, where you can choose a period to analize. 
+Also you can choose Linux distros to compare/visualize:
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
 
