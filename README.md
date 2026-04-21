@@ -30,6 +30,28 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 - What hardware would work well (or be enough) for Linux gaming?
 - Which popular games work well, and which don't on Linux?
 
+## :toolbox: Tech stack
+
+- Python 3.12/3.13
+- **Docker** and docker-compose for containerization
+- [Terraform for infrastructure (in progress)]
+- **Bruin** as pipeline tool
+- **DuckDB** (MotherDuck) for data warehouse [or/and **BigQuery** (in progress)]
+- [optional (in progress)] Google Cloud Storage
+- **Pandas** for data processing
+- Plotly and Streamlit charts for data visualization
+- **Streamlit** for dashboards
+
+## 🚀 Instructions to reproduce
+
+- [Setup environment](#hammer_and_wrench-setup-environment)
+- [Run workflow](#arrow_forward-run-workflow)
+- [Dashboard](#mag_right-dashboard)
+
+### :hammer_and_wrench: Setup environment
+
+
+
 ### 📊📈 Dashboards
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
