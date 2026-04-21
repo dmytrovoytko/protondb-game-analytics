@@ -50,6 +50,20 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 ### :hammer_and_wrench: Setup environment
 
+1. **Fork this repo on GitHub**. Or use `git clone https://github.com/dmytrovoytko/protondb-game-analytics.git` command to clone it locally, then `protondb-game-analytics`.
+2. Create GitHub CodeSpace from the repo. You need to choose 4-core machine with 16Gb RAM.
+![Create CodeSpace](/screenshots/codespace1.png)
+
+3. **Start CodeSpace**
+4. The app works in docker container, **you don't need to install packages locally to test it**.
+5. Only if you want to develop the project locally, you can run `pip install -r requirements.txt` (project tested on python 3.12/3.13).
+6. You need to copy/rename `.env.local` to `.env` and edit setting according to your environment. Run `cp .env.local .env` then edit `.env` file. Remember to never commit files containing credentials or any other sensitive information.
+
+(in progress)
+7. If you want and can use BigQuery you need to save GCP credentials to the file `gcp-credentials.json` (recommended) and then set GOOGLE_APPLICATION_CREDENTIALS in `.env` file. Then edit GCP_PROJECT_NAME, BQ_DATASET, GCS_BUCKET (optional). You also need to set proper access for the service account to access BigQuery (see the next part of description). 
+8. If you want to use Terraform, set `USE_TERRAFORM=true` in `.env` file.
+
+9. If you don't want to/can't use BigQuery, the default settings will activate alternative warehouse - DuckDb database (you can also create/use free! [MotherDuck](https://motherduck.com/) account to use cloud data warehouse).
 
 
 ### 📊📈 Dashboards
