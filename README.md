@@ -1,26 +1,32 @@
 # ProtonDB Game Analytics data engineering project
 
-Data Engineering project for DE ZoomCamp'26: 
+[ProtonDB 🎮 reports] -> (Bruin pipeline) -> DuckDB/BigQuery -> 📊 Dashboards in Streamlit
 
-[ProtonDB 🎮 reports] -> (Bruin) -> DuckDB/BigQuery -> 📊 Dashboards in Streamlit
+ProtonDB provides user-submitted reports on game compatibility with Proton on Linux.
+This project addresses the challenge of processing large-scale, semi-structured data to deliver actionable analytics for gamers considering Linux migration.
 
-ETL workflow for 🎮[ProtonDB Gaming reports data](https://github.com/bdefore/protondb-data)
+ETL workflow for 🎮[ProtonDB Gaming reports dataset](https://github.com/bdefore/protondb-data)
 
 ![Data Engineering ProtonDB Game Analytics](/screenshots/streamlit4.png)
+
+[Problem & goals](#problem-statement) [Architecture & Tech Stack](#architecture) [Instructions to Reproduce](#-instructions-to-reproduce) [Dashboards](#-dashboards)
 
 Project can be tested and deployed in **GitHub CodeSpaces** (the easiest option, and free), cloud virtual machine (AWS, Azure, GCP), or just locally.
 For the GitHub CodeSpace option you don't need to use anything extra at all - just your favorite web browser + GitHub account is totally enough.
 
+
 ## Problem statement
 
-If you feel deeply unsatisfied by Windows unreliable behavior/performace, or just curious about switching to Linux, but your desire to play games is stopping you, you might need Linux Gaming Analytics. With ProtonDB.com you can find out what games reliably play on Linux, which distros and hardware could be the best choice for your switch. Gamers from around the world submit reports on which games play well, and which don't even install.
+If you feel deeply unsatisfied by Windows unreliable behavior/performance, or just curious about switching to Linux, but your desire to play games is stopping you, you might need Linux Gaming Analytics. With ProtonDB.com you can find out what games reliably play on Linux, which distros and hardware could be the best choice for your switch. Gamers from around the world submit reports on which games play well, and which don't even install.
 But if you don't want to dig into those reports, you probably just need a few dashboards that this project provides to make your decision quickly.
+
+This project addresses the challenge of analyzing ProtonDB gaming reports to provide actionable insights for (potential) Linux gamers/switchers, overcoming data research volume and visualization hurdles.
 
 Maybe you were thinking of Ubuntu? Perhaps you need this comparison?
 
 ![Data Engineering ProtonDB Game Analytics](/screenshots/os-comparison.png)
 
-Please take into account, gaming reports are just a part of total Linux usage - from volunteers who reported about their experience. So it's just a glimps of big picture, definitely with realistic corellation.
+Please take into account, gaming reports are just a part of total Linux usage - from volunteers who reported about their experience. So it's just a glimps of big picture, definitely with realistic correllation.
 
 ## 🎯 Goals
 
@@ -28,13 +34,15 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 **The main goal** is straight-forward: build an end-to-end **Extract - Load - Transform** data pipeline, then **visualize** some insights.  
 - choose an interesting dataset
-- process (extract, transform, load) data
+- process (extract, clean, transform, load) data
 - deploy orchestration tool to manage pipeline
 - build a dashboard to visualize the data
 
 ### ProtonDB data sample
 
 You can take a look at the sample of processed data in [reports_piiremoved.json-sample.csv](/data/reports_piiremoved.json-sample.csv).
+Actual dataset includes 350+ thousands records in 460Mb json file (as of 2026-04).
+
 
 🕵️ Questions that I want to investigate during this project:
 
@@ -42,26 +50,44 @@ You can take a look at the sample of processed data in [reports_piiremoved.json-
 - What hardware would work well (or be enough) for Linux gaming?
 - Which popular games work well, and which don't on Linux?
 
+## Architecture
+
+```
+ProtonDB data monthly archive
+    |
+    v
+Bruin Pipeline
+(Extract & Transform)
+    |
+    v
+DuckDB / BigQuery
+(Load to Warehouse)
+    |
+    v
+Streamlit Dashboards
+(Visualize Insights)
+```
+
 ## :toolbox: Tech stack
 
 - Python 3.12/3.13
 - **Docker** and docker-compose for containerization
-- [Terraform for infrastructure (in progress)]
-- **[Bruin](https://getbruin.com/)** as pipeline tool
-- **DuckDB** (MotherDuck) for data warehouse [or/and **BigQuery** (in progress)]
-- [optional (in progress)] Google Cloud Storage
+- **[Bruin](https://getbruin.com/)** as pipeline building and orchestrating tool
+- **DuckDB** as local developer friendly and free data warehouse, or MotherDuck
 - **Pandas** for data processing
 - Plotly and Streamlit charts for data visualization
-- **Streamlit** for dashboards
+- **Streamlit** for easy interactive dashboards
+
+Core pipeline complete. BigQuery+Google Cloud Storage and Terraform integrations in progress for advanced and scalable deployment.
 
 ## 🚀 Instructions to reproduce
 
 ### TL;DR
 
-- Start CodeSpace - **4-core machine with 16Gb RAM**
+- Start Github CodeSpace - **4-core machine with 16Gb RAM**
 - `cp .env.local .env`
 - `bash deploy.sh`
-- observe processing and finally click the link `Local URL: http://localhost:8501` to open the app dashboard
+- observe processing (3-5 minutes) and finally click the link `Local URL: http://localhost:8501` to open the app dashboard
 
 - [Setup environment](#hammer_and_wrench-setup-environment)
 - [Run workflow](#arrow_forward-run-workflow)
@@ -129,15 +155,25 @@ If you run container in CodeSpace it will pop-up the notification that `Your app
 When you open the app it shows the dialog, where you can choose a period to analize. 
 Also you can choose Linux distros to compare/visualize/narrow down data on dashboards:
 
+**Top 10 OS Monthly Trends**
+
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
 
 Check out other dashboards:
 
+**Top 10 Hardware Configurations**
+
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard2.png)
+
+**Reports Status (Working/Non-Working) by Year**
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard3.png)
 
+**Top 10 Games with Most Working Reports**
+
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard4.png)
+
+**Top 10 Games with Most Not Working Reports**
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard5.png)
 
@@ -154,9 +190,9 @@ Don't forget to remove downloaded images if you experimented with project locall
 
 I personally switched to Linux many years ago, and really happy about that. It's interesting to observe how it becomes more and more popular, including gamers as active users. Playing games on Linux becomes much easier each year - you can see positive trends on dashboard 3.
 
-I plan to finish part of the pipeline to load data to BigQuery and Terraform scripts to allocate/destroy related infrastructure (BQ dataset and Storage bucket).
+I plan to finish part of the pipeline to load data to BigQuery and Terraform scripts to allocate/destroy related infrastructure (BQ dataset and Storage bucket). Then visualyze data in Looker Studio.
 
-Some more insightful vizualizations coming soon also. What do you want to know about Linux Gaming?
+Some more insightful visualizations coming soon also. What do you want to know about Linux Gaming?
 
 Stay tuned!
 
@@ -167,7 +203,6 @@ Stay tuned!
 - If you experience any issue while following this instruction (or something left unclear), please add it to [Issues](/issues), I'll be glad to help/fix. And your feedback, questions & suggestions are welcome as well!
 - Feel free to fork and submit pull requests.
 
-If you find this project helpful, please ⭐️star⭐️ my repo 
-https://github.com/dmytrovoytko/protondb-game-analytics to help other people discover it 🙏
+Explore the code and dashboards to see data engineering in action. ⭐️Star⭐️ [the repo](https://github.com/dmytrovoytko/protondb-game-analytics) if you find it insightful! this helps other people discover it 🙏
 
 Made with ❤️ in Ukraine 🇺🇦 Dmytro Voytko
