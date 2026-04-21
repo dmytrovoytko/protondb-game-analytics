@@ -9,7 +9,10 @@ ETL workflow for 🎮[ProtonDB Gaming reports dataset](https://github.com/bdefor
 
 ![Data Engineering ProtonDB Game Analytics](/screenshots/streamlit4.png)
 
-[🎯 Problem & goals](#problem-statement)  [🏗 Architecture & Tech Stack](#architecture)  [🚀 Instructions to Reproduce](#-instructions-to-reproduce)  [📊Dashboards](#-dashboards)
+- [🎯 Problem & goals](#problem-statement)
+- [🏗 Architecture & Tech Stack](#architecture)
+- [🚀 Instructions to Reproduce](#-instructions-to-reproduce)
+- [📊Dashboards](#-dashboards)
 
 Project can be tested and deployed in **GitHub CodeSpaces** (the easiest option, and free), cloud virtual machine (AWS, Azure, GCP), or just locally.
 For the GitHub CodeSpace option you don't need to use anything extra at all - just your favorite web browser + GitHub account is totally enough.
