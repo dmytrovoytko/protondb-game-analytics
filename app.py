@@ -5,6 +5,7 @@ import os
 import re
 from pathlib import Path
 import datetime
+import duckdb
 
 # -----------------------------------------------------------------------------
 # 1. Page Configuration
@@ -27,7 +28,7 @@ DUCKDB = 'duckdb' # export to DuckDB
 BIGQUERY = 'bigquery' # export to BigQuery
 
 MODE = os.environ.get('DATAWAREHOUSE', DUCKDB) # DUCKDB BIGQUERY SAMPLE
-DUCKDB_CONNECTION = '/app/data/duckdb.db'
+DUCKDB_CONNECTION = './data/duckdb.db'
 DATA_DIR = f'./data/'  # ! with '/' at the end!
 TARGET_FILE_NAME = 'reports_piiremoved.json'
 
@@ -58,6 +59,24 @@ def duckdb_connect(connection=""):
         return None, []
 
 
+def db_get_reports_records(con, table_name, start_date=None, end_date=None):
+    condition = ""
+    if start_date and end_date:
+        condition = f"WHERE strftime(timestamp, '%Y-%m-%d') <= '{end_date}'  \
+                    AND strftime(timestamp, '%Y-%m-%d') >= '{start_date}'"
+    query = f"SELECT app_steam_appid,app_title,timestamp, \
+                systeminfo_cpu,systeminfo_gpu,systeminfo_gpudriver,systeminfo_kernel,systeminfo_os,systeminfo_ram, \
+                responses_verdict,responses_installs \
+                FROM  {table_name} \
+                {condition} \
+                ORDER BY timestamp ASC;" # date_part('year', date)
+                # ,responses_opens,responses_startsplay,responses_significantbugs 
+    res = con.sql(query)
+    df = res.df()
+    if DEBUG:
+        print(" Total records:", df.shape[0])
+    return df
+
 class DbConnector:
     def __init__(self, mode=MODE):
         self.mode = mode
@@ -68,11 +87,11 @@ class DbConnector:
         #     bq_client, dataset = bigquery_connect()
         #     self.bq_client = bq_client
 
-    # def get_reports_records(self, table_name, ticker, start_date=START_DATE, end_date=None):
-    #     if self.mode == DUCKDB:
-    #         return db_get_ticker_records(self.con, table_name, ticker, start_date, end_date)
-    #     # elif self.mode == BIGQUERY:
-    #     #     return biqquery_get_ticker_records(self.bq_client, table_name, ticker, start_date, end_date)
+    def get_reports_records(self, table_name, start_date=None, end_date=None):
+        if self.mode == DUCKDB:
+            return db_get_reports_records(self.con, table_name, start_date, end_date)
+        # elif self.mode == BIGQUERY:
+        #     return biqquery_get_reports_records(self.bq_client, table_name, start_date, end_date)
 
 
 connection = DbConnector(MODE)
@@ -107,7 +126,10 @@ def clean_os_name(os_string):
 @st.cache_data
 def load_data(data_file):
     try:
-        df = pd.read_csv(data_file)
+        if connection.con:
+            df = connection.get_reports_records(table_name="ingest.protondb")
+        else:
+            df = pd.read_csv(data_file)
         
         # Ensure timestamp is datetime objects
         df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s', errors='coerce')
