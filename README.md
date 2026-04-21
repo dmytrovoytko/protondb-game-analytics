@@ -4,7 +4,7 @@ Data Engineering project for DE ZoomCamp'26: ProtonDB reports -> (Bruin) -> Duck
 
 ETL workflow for 🎮 [ProtonDB Gaming reports data](https://github.com/bdefore/protondb-data)
 
-![Data Engineering ProtonDB Game Analytics](/screenshots/streamlit3.png)
+![Data Engineering ProtonDB Game Analytics](/screenshots/streamlit4.png)
 
 Project can be tested and deployed in **GitHub CodeSpaces** (the easiest option, and free), cloud virtual machine (AWS, Azure, GCP), or just locally.
 For the GitHub CodeSpace option you don't need to use anything extra at all - just your favorite web browser + GitHub account is totally enough.
@@ -48,7 +48,7 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 - [Setup environment](#hammer_and_wrench-setup-environment)
 - [Run workflow](#arrow_forward-run-workflow)
-- [Dashboard](#-dashboards)
+- [Dashboards](#-dashboards)
 
 ### :hammer_and_wrench: Setup environment
 
@@ -61,7 +61,7 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 5. Only if you want to develop the project locally, you can run `uv sync` in `pipeline` directory (project tested on python 3.12/3.13).
 6. You need to copy/rename `.env.local` to `.env` and edit setting according to your environment. Run `cp .env.local .env` then edit `.env` file. Remember to never commit files containing credentials or any other sensitive information.
 
-(in progress)
+(work in progress)
 7. If you want and can use BigQuery you need to save GCP credentials to the file `gcp-credentials.json` (recommended) and then set GOOGLE_APPLICATION_CREDENTIALS in `.env` file. Then edit GCP_PROJECT_NAME, BQ_DATASET, GCS_BUCKET (optional). You also need to set proper access for the service account to access BigQuery (see the next part of description). 
 8. If you want to use Terraform, set `USE_TERRAFORM=true` in `.env` file.
 
@@ -71,7 +71,13 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 1. **Run `bash deploy.sh` to start app Docker container**. Building container takes some time. When new log messages will stop appearing, you can press enter to return to a command line (service will keep running in background).
 
+![Docker compose start](/screenshots/docker-compose0.png)
+
 ![Bruin pipeline start](/screenshots/bruin1.png)
+
+![Bruin pipeline working](/screenshots/bruin2.png)
+
+![Bruin pipeline working](/screenshots/bruin3.png)
 
 When you see these messages the app is ready!
 
@@ -80,7 +86,7 @@ When you see these messages the app is ready!
 You can scroll up to see previous messages with the steps of the workflow.
 
 2. Workflow commands are located in `start_app.sh` 
-- [it starts `terraform-setup.sh` script] (in progress)
+- [it starts `terraform-setup.sh` script] (work in progress)
 - then installs Bruin, UV, Streamlit. 
 - then starts Bruin pipeline `bruin run pipeline.yml`
 - finally executes `uv run streamlit run app.py` to start dashboard app
@@ -107,8 +113,6 @@ When you open the app it shows the dialog, where you can choose a period to anal
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
 
 Check out other dashboards:
-
-![Data Engineering ProtonDB Game Analytics](/visuals/dashboard1.png)
 
 ![Data Engineering ProtonDB Game Analytics](/visuals/dashboard2.png)
 
