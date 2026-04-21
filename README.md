@@ -1,4 +1,4 @@
-# ProtonDB Game Analytics data engineering project
+# ProtonDB 🎮Game Analytics data engineering project
 
 Data Engineering project for DE ZoomCamp'26: ProtonDB reports -> (Bruin) -> DuckDB/BigQuery -> Dashboards in Streamlit
 
