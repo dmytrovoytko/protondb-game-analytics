@@ -1,8 +1,10 @@
-# ProtonDB 🎮Game Analytics data engineering project
+# ProtonDB Game Analytics data engineering project
 
-Data Engineering project for DE ZoomCamp'26: ProtonDB reports -> (Bruin) -> DuckDB/BigQuery -> Dashboards in Streamlit
+Data Engineering project for DE ZoomCamp'26: 
 
-ETL workflow for 🎮 [ProtonDB Gaming reports data](https://github.com/bdefore/protondb-data)
+[ProtonDB 🎮 reports] -> (Bruin) -> DuckDB/BigQuery -> 📊 Dashboards in Streamlit
+
+ETL workflow for 🎮[ProtonDB Gaming reports data](https://github.com/bdefore/protondb-data)
 
 ![Data Engineering ProtonDB Game Analytics](/screenshots/streamlit4.png)
 
@@ -17,7 +19,7 @@ But if you don't want to dig into those reports, you probably just need a few da
 Maybe you were thinking of Ubuntu? Perhaps you need this comparison?
 
 ![Data Engineering ProtonDB Game Analytics](/screenshots/os-comparison.png)
- 
+
 Please take into account, gaming reports are just a part of total Linux usage - from volunteers who reported about their experience. So it's just a glimps of big picture, definitely with realistic corellation.
 
 ## 🎯 Goals
@@ -41,7 +43,7 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 - Python 3.12/3.13
 - **Docker** and docker-compose for containerization
 - [Terraform for infrastructure (in progress)]
-- **Bruin** as pipeline tool
+- **[Bruin](https://getbruin.com/)** as pipeline tool
 - **DuckDB** (MotherDuck) for data warehouse [or/and **BigQuery** (in progress)]
 - [optional (in progress)] Google Cloud Storage
 - **Pandas** for data processing
