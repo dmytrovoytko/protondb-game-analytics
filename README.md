@@ -48,7 +48,7 @@ This is my Data Engineering project in [DE ZoomCamp](https://github.com/DataTalk
 
 - [Setup environment](#hammer_and_wrench-setup-environment)
 - [Run workflow](#arrow_forward-run-workflow)
-- [Dashboard](#mag_right-dashboard)
+- [Dashboard](#-dashboards)
 
 ### :hammer_and_wrench: Setup environment
 
@@ -90,7 +90,7 @@ You can scroll up to see previous messages with the steps of the workflow.
 4. Dashboard app is based on Streamlit and located in `app.py`
 
 
-### 📊📈 Dashboard
+### 📊📈 Dashboards
 
 If you run docker container locally you can click the link `Local URL: http://localhost:8501` to open the app dashboard.
 
