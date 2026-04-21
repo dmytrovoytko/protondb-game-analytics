@@ -9,7 +9,7 @@ ETL workflow for 🎮[ProtonDB Gaming reports dataset](https://github.com/bdefor
 
 ![Data Engineering ProtonDB Game Analytics](/screenshots/streamlit4.png)
 
-[Problem & goals](#problem-statement) [Architecture & Tech Stack](#architecture) [Instructions to Reproduce](#-instructions-to-reproduce) [Dashboards](#-dashboards)
+[🎯 Problem & goals](#problem-statement)  [🏗 Architecture & Tech Stack](#architecture)  [🚀 Instructions to Reproduce](#-instructions-to-reproduce)  [📊Dashboards](#-dashboards)
 
 Project can be tested and deployed in **GitHub CodeSpaces** (the easiest option, and free), cloud virtual machine (AWS, Azure, GCP), or just locally.
 For the GitHub CodeSpace option you don't need to use anything extra at all - just your favorite web browser + GitHub account is totally enough.
@@ -50,7 +50,7 @@ Actual dataset includes 350+ thousands records in 460Mb json file (as of 2026-04
 - What hardware would work well (or be enough) for Linux gaming?
 - Which popular games work well, and which don't on Linux?
 
-## Architecture
+## 🏗 Architecture
 
 ```
 ProtonDB data monthly archive
