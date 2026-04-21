@@ -75,13 +75,15 @@ Streamlit Dashboards
 
 - Python 3.12/3.13
 - **Docker** and docker-compose for containerization
-- **[Bruin](https://getbruin.com/)** as pipeline building and orchestrating tool
+- **Bruin** as pipeline building and orchestrating tool
 - **DuckDB** as local developer friendly and free data warehouse, or MotherDuck
 - **Pandas** for data processing
 - Plotly and Streamlit charts for data visualization
 - **Streamlit** for easy interactive dashboards
 
 Core pipeline complete. BigQuery+Google Cloud Storage and Terraform integrations in progress for advanced and scalable deployment.
+
+Why [Bruin](https://getbruin.com/)? It is an open-source, end-to-end data pipeline tool designed to simplify data workflows by combining ingestion, transformation, quality checks, and orchestration into a single Command Line Interface. It works as an alternative to DBT transformations. I like the speed of installing dependencies and processing transformations, thanks to UV working inside as a component.
 
 ## 🚀 Instructions to reproduce
 
