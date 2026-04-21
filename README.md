@@ -10,7 +10,7 @@ ETL workflow for 🎮[ProtonDB Gaming reports dataset](https://github.com/bdefor
 ![Data Engineering ProtonDB Game Analytics](/screenshots/streamlit4.png)
 
 - [🎯 Problem & goals](#problem-statement)
-- [🏗 Architecture & Tech Stack](#architecture)
+- [🏗 Architecture & Tech Stack](#-architecture)
 - [🚀 Instructions to Reproduce](#-instructions-to-reproduce)
 - [📊Dashboards](#-dashboards)
 
