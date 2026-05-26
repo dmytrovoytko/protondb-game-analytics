@@ -1,4 +1,5 @@
 """@bruin
+
 name: ingest.protondb
 type: python
 image: python:3.12
@@ -12,7 +13,43 @@ depends:
 
 materialization:
     type: table
-    strategy: delete+insert # replace
+#   strategy: delete+insert
+  strategy: create+replace
+
+
+secrets:
+  - key: duckdb-default
+    inject_as: duckdb-default
+
+columns:
+  - name: app_steam_appid
+    type: BIGINT
+  - name: app_title
+    type: VARCHAR
+  - name: timestamp
+    type: BIGINT
+  - name: systeminfo_cpu
+    type: VARCHAR
+  - name: systeminfo_gpu
+    type: VARCHAR
+  - name: systeminfo_gpudriver
+    type: VARCHAR
+  - name: systeminfo_kernel
+    type: VARCHAR
+  - name: systeminfo_os
+    type: VARCHAR
+  - name: systeminfo_ram
+    type: VARCHAR
+  - name: responses_verdict
+    type: BIGINT
+  - name: responses_installs
+    type: BIGINT
+  - name: responses_opens
+    type: BIGINT
+  - name: responses_startsplay
+    type: BIGINT
+  - name: responses_significantbugs
+    type: BIGINT
 
 @bruin"""
 

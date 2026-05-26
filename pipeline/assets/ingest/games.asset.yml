@@ -3,6 +3,7 @@ type: duckdb.seed
 strategy: replace
 parameters:
   path: games.csv-filtered.csv
+connection: duckdb-default
 description: |
   Loads the Stean games data table from local CSV file.
   This table contains payment type information including payment_type_id and payment_description.
@@ -19,12 +20,34 @@ description: |
   AppID,Name,Release date,Estimated owners,Price,Windows,Linux,Metacritic score,Positive,Negative,Genres  
 
 
+secrets:
+  - key: duckdb-default
+    inject_as: duckdb-default
+
 columns:
-  - name: AppID
-    type: INTEGER
-    description: Steam AppID
-    primary_key: true
-    nullable: false
-  - name: Name
+  - name: app_id
     type: VARCHAR
-    description: Game name
+  - name: name
+    type: VARCHAR
+  - name: release_date
+    type: VARCHAR
+  - name: estimated_owners
+    type: VARCHAR
+  - name: price
+    type: VARCHAR
+  - name: windows
+    type: VARCHAR
+  - name: linux
+    type: VARCHAR
+  - name: metacritic_score
+    type: VARCHAR
+  - name: positive
+    type: VARCHAR
+  - name: negative
+    type: VARCHAR
+  - name: genres
+    type: VARCHAR
+  - name: _dlt_load_id
+    type: VARCHAR
+  - name: _dlt_id
+    type: VARCHAR
