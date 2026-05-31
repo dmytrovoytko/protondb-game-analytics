@@ -3,23 +3,22 @@
 name: ingest.protondb
 type: python
 image: python:3.12
+connection: duckdb-default
 description: |
-    Ingests ProtonDB data from github repo json file using Python requests library.
+  Ingests ProtonDB data from github repo json file using Python requests library.
   Github dataset info: Data exports from ProtonDB.com released under ODbL https://github.com/bdefore/protondb-data
 
   Loops through all records since ingest_starting_date and transforms the data.
   Uses Bruin Python materialization with create+replace strategy - returns a Pandas DataFrame and Bruin automatically
   replaces the data in the DuckDB table. 
 
-
 depends:
   - ingest.download
   - ingest.games
 
-connection: duckdb-default
 materialization:
-    type: table
-#   strategy: delete+insert
+  type: table
+  # strategy: delete+insert
   strategy: create+replace
 
 secrets:
