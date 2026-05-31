@@ -6,12 +6,12 @@ default_connections:
   duckdb: "duckdb-default"
 
 variables:
-  protondb_starting_year:
+  protondb_starting_date:
     type: string
-    default: "2022"
-  games_starting_year:
+    default: "2019-10-28" # First collected record: 2019-10-28 21:47:07
+  ingest_starting_date:
     type: string
-    default: "2010"
+    default: "2020-01-01" # Starting from which date we ingest records
   game_types:
     type: array
     items:
