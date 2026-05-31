@@ -273,7 +273,7 @@ def materialize():
         print(f"Target file for extraction {TARGET_FILE_NAME} not found. Aborting.")
         exit(1)
 
-    df1 = extract_json_reports(TARGET_FILE_NAME)
+    df1 = extract_json_reports(TARGET_FILE_NAME, ingest_starting_date)
     df1 = pd.read_csv(f"{data_file1}.csv", encoding="utf-8")
     print(f"\n\n{data_file1}: {len(df1)}")
     df1.info()
