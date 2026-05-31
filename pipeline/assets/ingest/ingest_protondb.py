@@ -3,19 +3,24 @@
 name: ingest.protondb
 type: python
 image: python:3.12
-connection: duckdb-default
 description: |
     Ingests ProtonDB data from github repo json file using Python requests library.
+  Github dataset info: Data exports from ProtonDB.com released under ODbL https://github.com/bdefore/protondb-data
+
+  Loops through all records since ingest_starting_date and transforms the data.
+  Uses Bruin Python materialization with create+replace strategy - returns a Pandas DataFrame and Bruin automatically
+  replaces the data in the DuckDB table. 
+
 
 depends:
   - ingest.download
   - ingest.games
 
+connection: duckdb-default
 materialization:
     type: table
 #   strategy: delete+insert
   strategy: create+replace
-
 
 secrets:
   - key: duckdb-default
@@ -24,8 +29,12 @@ secrets:
 columns:
   - name: app_steam_appid
     type: BIGINT
+    checks:
+      - name: not_null
   - name: app_title
     type: VARCHAR
+    checks:
+      - name: not_null
   - name: timestamp
     type: BIGINT
   - name: systeminfo_cpu
@@ -54,7 +63,7 @@ columns:
 @bruin"""
 
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 import os
 import json
@@ -63,26 +72,31 @@ import json
 from .settings import DATA_DIR, VISUALS_DIR, START_YEAR, START_DATE, DEBUG
 from .settings import MODE, SAMPLE, PARQUET, DUCKDB, BIGQUERY, CHUNKSIZE, SAMPLE_SIZE
 from .settings import SELECTED_COLS, CATEGORICAL_COLS
+
 # from settings import games_sets, SELECTED_GAMES
 from .settings import TARGET_FILE_NAME
-# from .utils import flatten_record # , get_dataset_file
-# DATA_DIR = f'/app/test/proj-data/'  # ! with '/' at the end!
-# Github dataset info: Data exports from ProtonDB.com released under ODbL https://github.com/bdefore/protondb-data
+
 
 if DEBUG:
     import tracemalloc
+
     # Start tracing memory allocations
     tracemalloc.start()
 
 
-def memory_check(i=''):
+def memory_check(i=""):
     # Take a snapshot of the current and peak memory usage
     current_mem, peak_mem = tracemalloc.get_traced_memory()
 
-    print(f"--{i}-- Current memory usage: {current_mem / (1024 * 1024):.2f} MiB", f"Peak memory usage: {peak_mem / (1024 * 1024):.2f} MiB")
+    print(
+        f"--{i}-- Current memory usage: {current_mem / (1024 * 1024):.2f} MiB",
+        f"Peak memory usage: {peak_mem / (1024 * 1024):.2f} MiB",
+    )
+
 
 if DEBUG:
     memory_check("Ingestion start")
+
 
 def flatten_record(obj, parent_key="", sep="_"):
     """
@@ -108,26 +122,28 @@ def flatten_record(obj, parent_key="", sep="_"):
 def df_transform1(df, cols):
     # yes/no cols to 1/0
     for col in cols:
-        df.loc[df[col] == 'no', col] = 0
-        df.loc[df[col] == 'yes', col] = 1
-        df.loc[df[col].isnull(), col] = 2 # coding empty values
+        df.loc[df[col] == "no", col] = 0
+        df.loc[df[col] == "yes", col] = 1
+        df.loc[df[col].isnull(), col] = 2  # coding empty values
         df[col] = df[col].astype(int)
     return df
 
+
 def df_transform2(df):
     # AppID to int
-    col_id = 'app_steam_appId'
+    col_id = "app_steam_appId"
     df[col_id] = df[col_id].astype(int)
 
     # type check
     # find the rows where the value is NOT a valid number
-    non_numeric_mask = pd.to_numeric(df[col_id], errors='coerce').isna()
+    non_numeric_mask = pd.to_numeric(df[col_id], errors="coerce").isna()
     strings_only = df[non_numeric_mask]
     if len(strings_only):
-        print(f'\n\n!!! AppID Errors: {len(strings_only)}\n{strings_only}\n\n')
+        print(f"\n\n!!! AppID Errors: {len(strings_only)}\n{strings_only}\n\n")
         return df[~non_numeric_mask]
     else:
         return df
+
 
 def normalize_df_columns(df):
     # normalizing column names - lowercase, no spaces
@@ -135,17 +151,16 @@ def normalize_df_columns(df):
     return df
 
 
-def extract_json_reports(file_name):
+def extract_json_reports(file_name, ingest_starting_date):
     import ijson
 
     data_file = DATA_DIR + file_name
-    skip_records = 0 # 348683 - SAMPLE_SIZE
-    print(f'Processing {file_name}')
-    chunksize = SAMPLE_SIZE
-    # f = urlopen('http://.../')
+    ingest_starting_datetime = datetime.fromisoformat(ingest_starting_date + "T00:00:00Z")
+    skip_records = 0  # 348683 - SAMPLE_SIZE
+    print(f"Processing {file_name}")
     with open(data_file, "r") as f:
-        objects = ijson.items(f, 'item')
-        export_list = []
+        objects = ijson.items(f, "item")
+        # export_list = []
         data = []
         i = 0
         min_record = {}
@@ -156,13 +171,16 @@ def extract_json_reports(file_name):
         for record in objects:
             # print('\n', i, record)
             flat_record = flatten_record(record)
+
+            # for debugging / possible future data let's look at consistency of keys present in json file
             fullest_record.update(flat_record)
             keys = flat_record.keys()
             len_keys = len(keys)
             if i == 0:
                 min_keys = len_keys
                 max_keys = len_keys
-                print(f'\nFirst record: {datetime.fromtimestamp(flat_record["timestamp"])}\n{flat_record}')
+                if DEBUG:
+                    print(f'\nFirst record: {datetime.fromtimestamp(flat_record["timestamp"])}\n{flat_record}' )
             else:
                 if min_keys > len_keys:
                     min_keys = len_keys
@@ -170,26 +188,26 @@ def extract_json_reports(file_name):
                 if max_keys < len_keys:
                     max_keys = len_keys
                     max_record = keys
-            # print(f' --> {i}, {len_keys}, [ {min_keys}, {max_keys} ]') #, keys) #, flat_record)
+
+            record_datetime = datetime.fromtimestamp(flat_record["timestamp"], tz=timezone.utc)
 
             # if i>=1_000_000:
             # if i>=SAMPLE_SIZE:
-            if i < skip_records:
-                # break
-                pass
-            else:
+            if record_datetime >= ingest_starting_datetime and i >= skip_records:
+                # filtered records
                 data.append(flat_record)
 
-            if i % CHUNKSIZE == 0: 
-                # ping
+            if i % CHUNKSIZE == 0:
+                # print progress message
                 if DEBUG:
                     memory_check(i)
-                print(f' --> {i}, {datetime.fromtimestamp(flat_record["timestamp"])}, {len_keys}, [ {min_keys}, {max_keys} / {len(fullest_record.keys())} ]') #, keys) #, flat_record)
+                print(f' --> {i}, {record_datetime}, {len_keys}, [ {min_keys}, {max_keys} / {len(fullest_record.keys())} ]' )
             i += 1
 
         print(f"\n---\ntotal: {i}")
-        print(f' --> [ {min_keys}, {max_keys} ]\n{min_record=}\n{max_record=}')
-        print(f'\nLatest record: {datetime.fromtimestamp(flat_record["timestamp"])}\n{flat_record}')
+        if DEBUG:
+            print(f" --> [ {min_keys}, {max_keys} ]\n{min_record=}\n{max_record=}")
+            print(f'\nLatest record: {record_datetime}\n{flat_record}' )
 
         try:
             df0 = pd.DataFrame(data)
@@ -212,7 +230,7 @@ def extract_json_reports(file_name):
         df2 = df_transform2(df1)
 
         # df[selected_cols].to_csv(f'{data_file}-sample-{SAMPLE_SIZE}.csv', encoding='utf-8', index=False)
-        df2 = df2[selected_cols] 
+        df2 = df2[selected_cols]
         print(f"{selected_cols=}")
         print()
 
@@ -220,8 +238,8 @@ def extract_json_reports(file_name):
         print(f"normalized columns:{list(df2.columns)}")
         print()
 
-        # df2.to_csv(f'{data_file}-sample-{SAMPLE_SIZE}.csv', encoding='utf-8', index=False)
-        df2.to_csv(f'{data_file}.csv', encoding='utf-8', index=False)
+        # df2.to_csv(f"{data_file}-sample-{SAMPLE_SIZE}.csv", encoding="utf-8", index=False)
+        df2.to_csv(f"{data_file}.csv", encoding="utf-8", index=False)
         # print(df[selected_cols].info())
         # print(df1.info())
         # print()
@@ -238,7 +256,17 @@ def materialize():
     Bruin will automatically insert this DataFrame into DuckDB based on materialization strategy.
     """
 
-    # dataset file is already downloaded and unpacked
+    # Get pipeline variables
+    bruin_vars = json.loads(os.environ["BRUIN_VARS"])
+    protondb_starting_date = bruin_vars.get("protondb_starting_date")
+    ingest_starting_date = bruin_vars.get("ingest_starting_date")
+    print(f"\n\n{protondb_starting_date=}, {ingest_starting_date=}")
+
+    # # Get start and end dates from environment variables
+    # start_date = os.environ.get('BRUIN_START_DATE')
+    # end_date = os.environ.get('BRUIN_END_DATE')
+
+   # dataset file is already downloaded and unpacked
     data_file1 = DATA_DIR + TARGET_FILE_NAME
     if os.path.exists(data_file1):
         print(f"Target file for extraction {TARGET_FILE_NAME} found: {data_file1}")
@@ -247,19 +275,10 @@ def materialize():
         exit(1)
 
     df1 = extract_json_reports(TARGET_FILE_NAME)
-    df1 = pd.read_csv(f'{data_file1}.csv', encoding="utf-8")
+    df1 = pd.read_csv(f"{data_file1}.csv", encoding="utf-8")
     print(f"\n\n{data_file1}: {len(df1)}")
     df1.info()
         
-    # Get Bruin parameters
-    bruin_vars = json.loads(os.environ["BRUIN_VARS"])
-    games_starting_year = bruin_vars.get('games_starting_year')
-    protondb_starting_year = bruin_vars.get('protondb_starting_year')
-    print(f"\n\n{games_starting_year=}, {protondb_starting_year=}")
-
     return df1
 
-    # Get start and end dates from environment variables
-    start_date = os.environ.get('BRUIN_START_DATE')
-    end_date = os.environ.get('BRUIN_END_DATE')
 

@@ -5,40 +5,42 @@ parameters:
   path: games.csv-filtered.csv
 connection: duckdb-default
 description: |
-  Loads the Stean games data table from local CSV file.
-  This table contains payment type information including payment_type_id and payment_description.
-  The lookup table is a static reference table that maps payment type codes to human-readable descriptions.
+  Loads the Steam games data table from local CSV file.
+  This table contains Steam games information including release date, estimated owners number, price, genres.
 
   Design Choices:
   - Why read from local CSV:
-    - Payment type codes are standardized and do not change frequently
+    - smaller subset of original [Steam Games Dataset](https://www.kaggle.com/datasets/fronkongames/steam-games-dataset)
+    - original games.csv is 389.15 MB, includes columns we don't need, it was not updating
     - Local seed file provides version control and reproducibility
 
   - Why seed file:
     - Seed files are a convenient way to load static data into a database
     - Seed asset automatically materializes into a table on each run
-  AppID,Name,Release date,Estimated owners,Price,Windows,Linux,Metacritic score,Positive,Negative,Genres  
-
 
 secrets:
   - key: duckdb-default
     inject_as: duckdb-default
-
-columns:
+columns: 
   - name: app_id
-    type: VARCHAR
+    type: BIGINT
+    checks:
+      - name: not_null
+      # - name: unique
   - name: name
     type: VARCHAR
+    checks:
+      - name: not_null
   - name: release_date
     type: VARCHAR
   - name: estimated_owners
     type: VARCHAR
   - name: price
-    type: VARCHAR
+    type: FLOAT
   - name: windows
-    type: VARCHAR
+    type: BOOL
   - name: linux
-    type: VARCHAR
+    type: BOOL
   - name: metacritic_score
     type: VARCHAR
   - name: positive
@@ -46,8 +48,4 @@ columns:
   - name: negative
     type: VARCHAR
   - name: genres
-    type: VARCHAR
-  - name: _dlt_load_id
-    type: VARCHAR
-  - name: _dlt_id
     type: VARCHAR

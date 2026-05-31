@@ -1,4 +1,4 @@
-AppID,Name,Release date,Estimated owners,Price,Windows,Linux,Metacritic score,Positive,Negative,Genres
+app_id,name,release_date,estimated_owners,price,windows,linux,metacritic_score,positive,negative,genres
 496350,Supipara - Chapter 1 Spring Has Come!,"Jul 29, 2016",0 - 20000,5.24,True,False,0,252,3,Adventure
 1034400,Mystery Solitaire The Black Raven,"May 6, 2019",0 - 20000,4.99,True,False,0,21,3,Casual
 3292190,버튜버 파라노이아 - Vtuber Paranoia,"Oct 31, 2024",0 - 20000,8.99,True,False,0,0,0,"Casual,Indie,Simulation"
